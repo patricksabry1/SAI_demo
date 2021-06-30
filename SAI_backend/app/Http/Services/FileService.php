@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
 
 
 class FileService
 {
-    public function hello() {
-        return "hello world!";
-    }
+   // TODO - this service will contain the logic necessary to facilitate the CRUD operations for file handling.
 }
