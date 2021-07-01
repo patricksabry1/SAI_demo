@@ -1,9 +1,7 @@
 <?php
 
-use App\Auth\Controllers\AuthController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 |
 */
-
 
 // house all current version endpoints in V1, allows for easier decoupling and extensibility for future versions
 Route::prefix('v1')->group(function () {
@@ -29,13 +26,9 @@ Route::prefix('v1')->group(function () {
     // get logged in user
     Route::get('me',                [UserController::class, 'showUser']);
 
-
-//    // file system CRUD endpoints
-//    Route::prefix('file')->group(function () {
-//        Route::get('',      [FileController::class, 'index']);
-//        Route::post('',     [FileController::class, 'create']);
-//        Route::get('',      [FileController::class, 'read']);
-//        Route::put('',      [FileController::class, 'update']);
-//        Route::delete('',   [FileController::class, 'delete']);
-//    });
+    // file system CRUD endpoints
+    Route::prefix('file')->group(function () {
+        Route::post('{userId}/upload',       [FileController::class, 'uploadFile'])->where('userId', '[0-9]+');;
+        Route::get('{objectId}',    [FileController::class, 'fetchFileInformation'])->where('objectId', '[0-9]+');
+    });
 });

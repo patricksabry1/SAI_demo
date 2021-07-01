@@ -2,78 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FileIndexRequest;
-use App\Services\FileService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Response;
+use App\Http\Requests\UploadFileRequest;
+use App\Http\Services\EmailService;
+use App\Http\Services\FileService;
+use Illuminate\Http\Request;
 
 class FileController extends Controller
 {
     /**
-     * AccountController constructor.
+     * FileController constructor.
      */
     public function __construct()
     {
         $this->middleware('auth:api');
     }
 
+
     /**
-     * @return JsonResponse
+     * Uploads file to S3, saves file meta details to database and fires off email job.
+     *
+     * @param UploadFileRequest $request
+     * @return String
      */
-    public function index()
+    public function uploadFile(Request $request, $userId)
     {
-        $response = (new FileService())->hello();
+        $file = (new FileService())->storeTestFile($request, $userId);
 
-        return  Response::json([
-            'message' => $response,
-        ], 401);
+        // fire off email with uploaded file details
+        (new EmailService())->sendConfirmationEmail($file);
+        return $file;
     }
-
-//    /**
-//     * @param AccountOnlyCreateRequest $request
-//     * @return AccountResource
-//     */
-//    public function create(AccountOnlyCreateRequest $request)
-//    {
-//        $input = $request->getInput();
-//        $account = (new AccountService())->storeAccount($input, auth()->user());
-//
-//        return new AccountResource($account);
-//    }
-//
-//    /**
-//     * @param Account $account
-//     * @return AccountResource
-//     */
-//    public function read(Account $account): AccountResource
-//    {
-//        $account->load(['accountType', 'accountManager', 'defaultProduct']);
-//        return new AccountResource($account);
-//    }
-//
-//    /**
-//     * @param AccountUpdateRequest $request
-//     * @param Account $account
-//     * @return AccountResource
-//     */
-//    public function update(AccountUpdateRequest $request, Account $account)
-//    {
-//        $input = $request->getInput();
-//        $account = (new AccountService())->updateAccount($account, $input);
-//
-//        return new AccountResource($account);
-//    }
-//
-//    /**
-//     * @param Account $account
-//     * @return JsonResponse
-//     */
-//    public function delete(Account $account)
-//    {
-//        (new AccountService())->destroyAccount($account, auth()->user());
-//
-//        return JsonResponse::create();
-//    }
 }

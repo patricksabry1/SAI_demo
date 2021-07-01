@@ -117,6 +117,9 @@
       <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/tymon/jwt-auth" />
       <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/namshi/jose" />
       <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/mtdowling/jmespath.php" />
+      <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/league/flysystem-aws-s3-v3" />
+      <excludeFolder url="file://$MODULE_DIR$/SAI_backend/vendor/aws/aws-sdk-php" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
