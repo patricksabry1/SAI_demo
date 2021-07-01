@@ -18,17 +18,16 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
     // user CRUD endpoints
     Route::prefix('user')->group(function () {
-        Route::post('create',       [UserController::class, 'createUser']);
-        Route::post('login',        [UserController::class, 'loginUser']);
-        Route::delete('delete',     [UserController::class, 'deleteUser']);
+        Route::post('create',           [UserController::class, 'createUser']);
+        Route::post('login',            [UserController::class, 'loginUser']);
+        Route::delete('delete',         [UserController::class, 'deleteUser']);
     });
 
     // get logged in user
-    Route::get('me',                [UserController::class, 'showUser']);
+    Route::get('me',                    [UserController::class, 'showUser']);
 
-    // file system CRUD endpoints
+    // file handling
     Route::prefix('file')->group(function () {
-        Route::post('{userId}/upload',       [FileController::class, 'uploadFile'])->where('userId', '[0-9]+');;
-        Route::get('{objectId}',    [FileController::class, 'fetchFileInformation'])->where('objectId', '[0-9]+');
+        Route::post('{userId}/upload',  [FileController::class, 'uploadFile'])->where('userId', '[0-9]+');;
     });
 });

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UploadFileRequest;
 use App\Http\Services\EmailService;
 use App\Http\Services\FileService;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
 
 class FileController extends Controller
 {
@@ -22,14 +23,15 @@ class FileController extends Controller
      * Uploads file to S3, saves file meta details to database and fires off email job.
      *
      * @param UploadFileRequest $request
-     * @return String
+     * @return JsonResponse
      */
-    public function uploadFile(Request $request, $userId)
+    public function uploadFile(UploadFileRequest $request, $userId)
     {
-        $file = (new FileService())->storeTestFile($request, $userId);
+        $file = (new FileService())->storeFile($request, $userId);
 
         // fire off email with uploaded file details
-        (new EmailService())->sendConfirmationEmail($file);
-        return $file;
+        $response = (new EmailService())->sendConfirmationEmail($file, $userId);
+
+        return $response;
     }
 }
