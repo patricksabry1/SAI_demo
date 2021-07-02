@@ -7,12 +7,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Response;
 
 /**
- * Class InvalidPasswordException
+ * Class InvalidUserException
  * @package App\Exceptions
  */
-class InvalidPasswordException extends Exception {
+class UserExistsException extends Exception {
     /*** @var string */
-    protected $message = 'Invalid password. Please try again.';
+    protected $message = 'A user with that email already exists.';
 
     /**
      * @return JsonResponse

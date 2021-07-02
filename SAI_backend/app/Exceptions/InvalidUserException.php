@@ -22,6 +22,6 @@ class InvalidUserException extends Exception {
         return Response::json([
             'error'   => class_basename($this),
             'message' => $this->getMessage(),
-        ], 409);
+        ], 400);
     }
 }

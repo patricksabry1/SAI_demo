@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $s3_object_id
  * @property string $file_name
+ * @property int $file_size
  * @property string $uploaded_at
  * @property string $created_at
  * @property string $updated_at

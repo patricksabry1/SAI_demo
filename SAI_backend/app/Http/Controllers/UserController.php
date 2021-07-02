@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidPasswordException;
 use App\Exceptions\InvalidUserException;
+use App\Http\Services\AuthService;
 use App\Models\User;
 use Exception;
+use http\Client\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
@@ -17,27 +20,28 @@ class UserController extends controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->only(['createUser', 'showUser']);
+        $this->middleware('auth')->only('showUser');
     }
 
-
+    /**
+     * Creates a system user and stores their details in DB
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function createUser(Request $request) {
-        $user = User::query()->firstOrNew([
-            'name'      => 'Patrick',
-            'email'     => 'patricksabry97@hotmail.com',
-            'password'  => Hash::make('test123')
-        ]);
+        $input = json_decode($request->getContent(),true);
 
-        if (!$user->exists) {
-            $user->save();
-        }
+        $response = (new AuthService())->createUser($input);
+
+        return $response;
     }
 
     /**
      * Attempts to authenticate a user for login, checks if user exists in DB
      * and validates credentials.
      *
-     * @return String
+     * @return JsonResponse
      * @throws Exception
      */
     public function loginUser() {
@@ -45,23 +49,9 @@ class UserController extends controller
         // get login credentials from request
         $credentials = request()->only(['email','password']);
 
-        // check if user email exists in DB
-        $user = User::query()
-            ->where('email', Arr::get($credentials, 'email'))
-            ->first();
+        $response = (new AuthService())->loginUser($credentials);
 
-        if (empty($user)) {
-            throw new InvalidUserException();
-        }
-
-        // attempt to authenticate using middleware, return JWT token if successful.
-        $token = auth()->attempt($credentials);
-
-        if (!$token) {
-            throw new InvalidPasswordException();
-        } else {
-            return json_encode(['token' => $token]);
-        }
+        return $response;
     }
 
     public function showUser() {
