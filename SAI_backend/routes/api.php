@@ -20,6 +20,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('user')->group(function () {
         Route::post('create',           [UserController::class, 'createUser']);
         Route::post('login',            [UserController::class, 'loginUser']);
+        Route::post('logout',           [UserController::class, 'logoutUser']);
         Route::delete('delete',         [UserController::class, 'deleteUser']);
     });
 

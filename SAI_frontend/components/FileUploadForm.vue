@@ -22,10 +22,11 @@
   </div>
 </template>
 
-<script>
+<script>  
   export default {
     data() {
       return {
+        file1:'',
         form: {
           name: '',
           checked: []
@@ -33,18 +34,37 @@
         show: true
       }
     },
+
+    mounted() {        
+      const headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer '.concat(this.$cookiz.get('jwt'))
+      }
+
+      try {
+          // validate user using auth token, redirect user to login and delete token if failed.
+          this.$axios.get('http://sai-backend.test/api/v1/me', 
+          {
+              headers: headers
+          });
+      } catch(e) {
+        this.$store.commit('auth/setAuth', false);
+        this.$cookiz.remove('jwt');
+        this.$router.push('/login');
+      }
+    },
+
     methods: {
       onSubmit(event) {
         event.preventDefault()
         alert(JSON.stringify(this.form))
       },
+      
       onReset(event) {
         event.preventDefault()
         // Reset our form values
         this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
         // Trick to reset/clear native browser form validation state
         this.show = false
         this.$nextTick(() => {

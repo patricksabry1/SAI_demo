@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InvalidPasswordException;
-use App\Exceptions\InvalidUserException;
 use App\Http\Services\AuthService;
-use App\Models\User;
 use Exception;
-use http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends controller
 {
@@ -54,7 +48,25 @@ class UserController extends controller
         return $response;
     }
 
+    /**
+     * Fetches the details of a logged in user, authentication guarded.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function showUser() {
-        return auth()->user();
+        $response = (new AuthService())->getloggedInUser();
+
+        return $response;
+    }
+
+    /**
+     * Logs a user out using JWT auth.
+     *
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function logoutUser() {
+        return (new AuthService())->logoutUser();
     }
 }

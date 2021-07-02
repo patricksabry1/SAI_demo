@@ -9,7 +9,6 @@
 </template>
 
 <script>
-
 export default {
     name: 'Login',
     
@@ -27,22 +26,21 @@ export default {
             };
 
             const headers = {
-                'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             }
 
-            let response = await this.$axios.post('http://sai-backend.test/api/v1/user/login', JSON.stringify(loginData), 
+            // send form data to backend endpoint for validation, set token cookie if successful.
+            await this.$axios.post('http://sai-backend.test/api/v1/user/login', JSON.stringify(loginData), 
             {
                 headers: headers
             }).then((res) => {
-                console.log(res);
-                this.$cookiz.set('token', res.data.token);
+                this.$cookiz.set('jwt', res.data.token);
+                this.$store.commit('auth/setAuth', true);
                 this.$router.push('file-upload');
             }).catch((error) => {
                 console.log('error caught: ', error)
             });
-            console.log(response);        
         }
     }
 }

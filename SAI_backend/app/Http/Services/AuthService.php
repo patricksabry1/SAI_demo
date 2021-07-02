@@ -8,6 +8,7 @@ use App\Exceptions\InvalidPasswordException;
 use App\Exceptions\InvalidUserException;
 use App\Exceptions\UserExistsException;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
@@ -19,7 +20,7 @@ class AuthService
             'name'      => Arr::get($input, 'name'),
             'email'     => Arr::get($input, 'email')
         ],[
-            'password'  => Hash::make(Arr::get($input, 'password'),) // can substitute hash for bcrypt optional
+            'password'  => Hash::make(Arr::get($input, 'password')) // can substitute hash for bcrypt optional
         ]);
 
         if ($user->exists) {
@@ -53,5 +54,28 @@ class AuthService
         } else {
             return response()->json(['success' => true, 'token' => $token]);
         }
+    }
+
+    public function logoutUser() {
+        try {
+            auth()->logout();
+
+            return response()->json([
+                'message' => 'user logged out.',
+            ], 200);
+        } catch (Exception $e) {
+
+        }
+    }
+
+    // this function is guarded by auth, formatted response
+    // error handling not necessary
+    public function getloggedInUser() {
+        return response()->json([
+            'id'            => auth()->user()->id,
+            'name'          => auth()->user()->name,
+            'email'         => auth()->user()->email,
+            'created_at'    => auth()->user()->password
+        ]);
     }
 }
