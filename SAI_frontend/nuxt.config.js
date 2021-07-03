@@ -20,8 +20,13 @@ export default {
   css: [
   ],
 
+  router: {
+    middleware: ['auth'],
+  },
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~plugins/mixins/user.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -38,7 +43,39 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    '@nuxtjs/auth-next'
   ],
+
+  axios: {
+    baseURL: 'http://sai-backend.test/api/v1'
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token'
+        },
+        user: {
+          property: false 
+        },
+        endpoints: {
+          login: {
+             url: 'auth/login', 
+             method: 'POST', 
+          },
+          user: { 
+            url: 'auth/user', 
+            method: 'GET' 
+          },
+          logout: { 
+            url: 'logout', 
+            method: 'POST' 
+          }
+        }
+      }
+    }
+  },
 
   styleResources: {
     scss: [

@@ -39,13 +39,13 @@ class EmailService
             return response()->json([
                 "success"    => true,
                 "message"    => "File successfully uploaded to S3",
-                "file_name"  => $file['file_name'],
+                "file_name"  => $file->file_name,
             ]);
         } catch (Exception $e) {
             return response()->json([
                 "success"    => false,
                 "message"    => $e->getMessage(),
-                "file_name"  => $file['file_name'],
+                "file_name"  => $file->file_name,
             ], 400);
         }
     }

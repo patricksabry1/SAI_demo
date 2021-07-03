@@ -20,7 +20,7 @@ class FileService
      * @param UploadFileRequest $request
      * @param int $userId
      *
-     * @return Model
+     * @return Mixed
      */
     public function storeFile(UploadFileRequest $request, int $userId)
     {

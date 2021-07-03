@@ -1,42 +1,51 @@
 <template>
-    <div>
-        <b-navbar toggleable="lg" type="dark" variant="dark">
-            <b-navbar-brand href="#">File Upload Demo</b-navbar-brand>
+    <nav class="navbar navbar-expand-sm bg-dark">
+        <div class="container">
+            <a class="navbar-brand">
+                SAI Technical Demo
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-            <b-collapse id="nav-collapse" is-nav>
-
-            <!-- Right aligned nav items -->
-            <b-navbar-nav class="ml-auto" v-if="isAuthenticated">
-                <b-nav-item @click="logout">Logout</b-nav-item>
-            </b-navbar-nav>
-            <b-navbar-nav v-else class="ml-auto" >
-                <b-nav-item to="/register">Register</b-nav-item>
-                <b-nav-item to="/login">Login</b-nav-item>
-            </b-navbar-nav>
-
-            </b-collapse>
-        </b-navbar>
-    </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <template v-if="!loggedIn">
+                        <li class="nav-item">
+                            <nuxt-link :to="{ name: 'login' }" class="nav-link">
+                                Login
+                            </nuxt-link>
+                        </li>
+                        <li class="nav-item">
+                            <nuxt-link :to="{ name: 'register' }" class="nav-link">
+                                Register
+                            </nuxt-link>                        
+                        </li>
+                    </template>
+                    <template v-if="loggedIn">
+                        <li class="nav-item">
+                            <a class="nav-link" @click.prevent="logout" href="#">
+                                    Logout
+                            </a>  
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </template>
-
 <script>
 export default {
-    mounted() {
-        console.log(this.$store.state.auth.authenticated);
-    },
-    computed: {
-        isAuthenticated() {
-            return this.$store.state.auth.authenticated;
-        }
-    },
     methods: {
         logout() {
-            this.$cookiz.remove('jwt');
-            this.$router.push('/login');
-            this.$store.commit('auth/setAuth', false);
+            this.$auth.logout();
         }
     }
 }
 </script>
+
+<style scoped>
+.nav.navbar-nav.navbar-right li a {
+    color: white;
+}
+</style>

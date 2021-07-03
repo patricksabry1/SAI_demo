@@ -1,11 +1,15 @@
 <template>
-    <b-form class="form-signin" @submit.prevent="submitRegistration">
-        <h1 class="h3 mb-3 fw-normal text-center">Register</h1>
-        <b-form-input v-model="name" class="form-control" placeholder="Name" required />
-        <b-form-input v-model="email" type="email" class="form-control" placeholder="Email" required />
-        <b-form-input v-model="password" type="password" class="form-control" placeholder="Password" required />
-        <b-button variant="primary" class="btn btn-lg btn-block" type="submit">Register</b-button>
-    </b-form>
+    <b-card class="shadow sm rounded text-center" style="width: 24rem;">
+        <b-form class="form-signin" @submit.prevent="submitRegistration">
+            <h1 class="h3 mb-3 fw-normal text-center">Register</h1>
+            <b-form-input v-model="registrationForm.name" class="form-control" placeholder="Name" required />
+            <b-form-input v-model="registrationForm.email" type="email" class="form-control" placeholder="Email" required />
+            <b-form-input v-model="registrationForm.password" type="password" class="form-control" placeholder="Password" required />
+            <b-button variant="primary" class="btn btn-lg btn-block" type="submit">Register</b-button>
+            <hr>
+            <span>Already have an account? <a href="/login">login here</a></span>
+        </b-form>
+    </b-card>
 </template>
 
 <script>
@@ -14,33 +18,42 @@ export default {
     name: 'Login',
     data() {
         return {
-            name: '',
-            email: '',
-            password: '',
+            registrationForm: {
+                name: '',
+                email: '',
+                password: '',
             }
+        }
     },
     methods: {
-        // sends register
         async submitRegistration() {
-            const $registrationData = {
-                'name': this.name,
-                'email': this.email,
-                'password': this.password
-            };
 
             await fetch('http://sai-backend.test/api/v1/user/create', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify($registrationData)
+                body: JSON.stringify(this.registrationForm)
             });
 
-            await this.$router.push('login');
+            await this.$auth.login({ 
+                data: {
+                    email: this.registrationForm.email,
+                    password: this.registrationForm.password
+                } 
+            });
+
+            this.$router.push({ path: '/file-upload' });
         }
     }
 }
 </script>
 
 <style>
+    .card {
+        margin: 0 auto; 
+        float: none; 
+        margin-top: 50px;
+        margin-bottom: 10px; 
+    }
     .form-signin {
     width: 100%;
     max-width: 330px;

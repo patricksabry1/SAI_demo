@@ -1,11 +1,15 @@
 <template>
-    <b-form class="form-signin" @submit.prevent="login">
-        <h1 class="h3 mb-3 fw-normal text-center">Sign in</h1>
+    <b-card class="shadow sm rounded text-center" style="width: 24rem;">
+        <b-form class="form-signin" @submit.prevent="login">
+            <h1 class="h3 mb-3 fw-normal text-center">Login</h1>
 
-        <b-form-input v-model="email" type="email" class="form-control" placeholder="Email" required />
-        <b-form-input v-model="password" type="password" class="form-control" placeholder="Password" required />
-        <b-button variant="primary" class="btn btn-lg btn-block" type="submit">Sign in</b-button>
-    </b-form>
+            <b-form-input v-model="loginForm.email" type="email" class="form-control" placeholder="Email" required />
+            <b-form-input v-model="loginForm.password" type="password" class="form-control" placeholder="Password" required />
+            <b-button variant="primary" class="btn btn-lg btn-block" type="submit">Login</b-button>
+            <hr>
+            <span>Don't have an account? <a href="/register">register here</a></span>
+        </b-form>
+    </b-card>
 </template>
 
 <script>
@@ -14,39 +18,38 @@ export default {
     
     data() {
         return {
-            email: '',
-            password: '',
+            loginForm: {
+                email: '',
+                password: '',
             }
+        }
     },
     methods: {
         async login() {
-            const loginData = {
-                'email': this.email,
-                'password': this.password
-            };
+            try {
+                await this.$auth.loginWith('local', {data: {
+                    email: this.loginForm.email,
+                    password: this.loginForm.password
+                }});
+                
+                console.log(this.$auth);
 
-            const headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                this.$router.push({ path: '/file-upload' });
+            } catch (e) {
+                console.log(e);
             }
-
-            // send form data to backend endpoint for validation, set token cookie if successful.
-            await this.$axios.post('http://sai-backend.test/api/v1/user/login', JSON.stringify(loginData), 
-            {
-                headers: headers
-            }).then((res) => {
-                this.$cookiz.set('jwt', res.data.token);
-                this.$store.commit('auth/setAuth', true);
-                this.$router.push('file-upload');
-            }).catch((error) => {
-                console.log('error caught: ', error)
-            });
         }
     }
 }
 </script>
 
 <style>
+    .card {
+        margin: 0 auto; 
+        float: none; 
+        margin-top: 50px;
+        margin-bottom: 10px; 
+    }
     .form-signin {
     width: 100%;
     max-width: 330px;

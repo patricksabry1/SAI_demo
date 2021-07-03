@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -16,16 +17,17 @@ use Illuminate\Support\Facades\Route;
 
 // house all current version endpoints in V1, allows for easier decoupling and extensibility for future versions
 Route::prefix('v1')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('login',            [AuthController::class, 'login']);
+        Route::post('logout',           [AuthController::class, 'logout']);
+        Route::post('refresh',          [AuthController::class, 'refresh']);
+        Route::get('user',              [AuthController::class, 'me']);
+    });
+
     // user CRUD endpoints
     Route::prefix('user')->group(function () {
         Route::post('create',           [UserController::class, 'createUser']);
-        Route::post('login',            [UserController::class, 'loginUser']);
-        Route::post('logout',           [UserController::class, 'logoutUser']);
-        Route::delete('delete',         [UserController::class, 'deleteUser']);
     });
-
-    // get logged in user
-    Route::get('me',                    [UserController::class, 'showUser']);
 
     // file handling
     Route::prefix('file')->group(function () {
