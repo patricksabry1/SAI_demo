@@ -91,10 +91,10 @@
       uploadFile() {
         this.spinner.submit = true;
 
-        // make axios request as multipart form data to backend,
+        // Make axios request as multipart form data to backend
         let url = '/file/' + this.$auth.user.id + '/upload'
 
-        // instantiate form data object, append the file
+        // Instantiate form data object, append the file
         let formData = new FormData();
         formData.append('file', this.file);
 
@@ -125,15 +125,15 @@
 </script>
 
 <style scoped>
-    .card {
-        margin: 0 auto; 
-        float: none; 
-        margin-top: 50px;
-        margin-bottom: 10px; 
-    }
-    .center-block {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
+.card {
+    margin: 0 auto; 
+    float: none; 
+    margin-top: 50px;
+    margin-bottom: 10px; 
+}
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 </style>

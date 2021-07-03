@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\UserFile;
 use Aws\S3\Exception\S3Exception;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -29,7 +28,6 @@ class FileService
         $fileName = $request->file('file')->getClientOriginalName();
         $fileSize = $request->file('file')->getSize();
 
-
         // generate unique S3 object key as a hash of user_id + filename
         $object_key = MD5($userId . $fileName);
 
@@ -38,7 +36,10 @@ class FileService
             try {
                 Storage::disk('s3')->put($object_key, file_get_contents($file));
             } catch (S3Exception $e) {
-                return $e->getAwsErrorMessage();
+                return response()->json([
+                    'error'     => 'S3Exception',
+                    'message'   => $e->getAwsErrorMessage()
+                ], 400);
             }
         } else {
             return response()->json([

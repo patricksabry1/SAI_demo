@@ -32,7 +32,7 @@ class EmailService
             ], function ($message) use ($recipientEmail)
             {
                 $message->from('patricksabry97@hotmail.com', 'Patrick Sabry');
-                $message->to('notify@test.test');
+                $message->to('notify@test.test'); // hardcoded for demo, would otherwise consume $recipientEmail
                 $message->subject('A file has been successfully uploaded to the cloud!');
             });
 

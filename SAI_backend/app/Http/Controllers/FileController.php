@@ -30,6 +30,7 @@ class FileController extends Controller
         $file = (new FileService())->storeFile($request, $userId);
 
         // fire off email with uploaded file details
+        // TODO - decouple email task and push to FIFO queue for async processing
         $response = (new EmailService())->sendConfirmationEmail($file, $userId);
 
         return $response;

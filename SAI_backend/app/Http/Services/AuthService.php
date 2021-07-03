@@ -6,6 +6,7 @@ namespace App\Http\Services;
 
 use App\Exceptions\UserExistsException;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Response;
 
 class AuthService
 {
+    /**
+     * Creates a user in the database if does not already exist.
+     *
+     * @param $input
+     *
+     * @return JsonResponse
+     */
     public function createUser($input) {
         $user = User::query()->firstOrNew([
             'name'      => Arr::get($input, 'name'),

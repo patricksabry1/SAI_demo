@@ -1,7 +1,7 @@
 <template>
     <div>
         <GlobalHeader />
-         <div class="main-content">
+        <div class="main-content">
             <b-container>
                 <Nuxt />
             </b-container>

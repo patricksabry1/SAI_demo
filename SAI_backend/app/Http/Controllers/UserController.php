@@ -10,14 +10,6 @@ use Illuminate\Http\Request;
 class UserController extends controller
 {
     /**
-     * UserController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth')->only('showUser');
-    }
-
-    /**
      * Creates a system user and stores their details in DB
      *
      * @return JsonResponse

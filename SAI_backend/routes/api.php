@@ -31,6 +31,6 @@ Route::prefix('v1')->group(function () {
 
     // file handling
     Route::prefix('file')->group(function () {
-        Route::post('{userId}/upload',  [FileController::class, 'uploadFile'])->where('userId', '[0-9]+');;
+        Route::post('{userId}/upload',  [FileController::class, 'uploadFile'])->where('userId', '[0-9]+');
     });
 });
