@@ -4,14 +4,12 @@
 namespace App\Http\Services;
 
 
-use App\Exceptions\InvalidPasswordException;
-use App\Exceptions\InvalidUserException;
 use App\Exceptions\UserExistsException;
 use App\Models\User;
-use Exception;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+
 
 class AuthService
 {
@@ -34,48 +32,5 @@ class AuthService
             'name'      => $user->name,
             'email'     => $user->email
         ], 201);
-    }
-
-    public function loginUser($credentials) {
-        // check if user email exists in DB
-        $user = User::query()
-            ->where('email', Arr::get($credentials, 'email'))
-            ->first();
-
-        if (empty($user)) {
-            throw new InvalidUserException();
-        }
-
-        // attempt to authenticate using middleware, return JWT token if successful.
-        $token = auth()->attempt($credentials);
-
-        if (!$token) {
-            throw new InvalidPasswordException();
-        } else {
-            return response()->json(['success' => true, 'token' => $token]);
-        }
-    }
-
-    public function logoutUser() {
-        try {
-            auth()->logout();
-
-            return response()->json([
-                'message' => 'user logged out.',
-            ], 200);
-        } catch (Exception $e) {
-
-        }
-    }
-
-    // this function is guarded by auth, formatted response
-    // error handling not necessary
-    public function getloggedInUser() {
-        return response()->json([
-            'id'            => auth()->user()->id,
-            'name'          => auth()->user()->name,
-            'email'         => auth()->user()->email,
-            'created_at'    => auth()->user()->password
-        ]);
     }
 }

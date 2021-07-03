@@ -2,39 +2,42 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 
-class ApiRequest extends FormRequest
+abstract class ApiRequest extends LaravelFormRequest
 {
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    abstract public function rules();
+
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return false;
-    }
+    abstract public function authorize();
 
     /**
-     * Get the validation rules that apply to the request. Rules will be extended and defined in request-specific classes
+     * Handle a failed validation attempt.
      *
-     * @return array
+     * @param  Validator $validator
+     * @return void
+     *
+     * @throws ValidationException
      */
-    public function rules()
+    protected function failedValidation(Validator $validator)
     {
-        return [
-            //
-        ];
-    }
+        $errors = (new ValidationException($validator))->errors();
 
-    /**
-     * Get the user input
-     *
-     * @return array
-     */
-    public function getInput()
-    {
-        return array_intersect_key($this->all(), $this->rules());
+        throw new HttpResponseException(
+            response()->json(['errors' => $errors], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+        );
     }
 }

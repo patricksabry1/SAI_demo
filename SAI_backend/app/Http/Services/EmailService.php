@@ -20,7 +20,7 @@ class EmailService
      * @return JsonResponse
      */
     public function sendConfirmationEmail($file, $userId) {
-        // get user email address for mail send
+        // get user email address for mail send. Will be hard coded for the sake of demo requirement.
         $recipientEmail = User::query()->where('id', $userId)->value('email');
 
         try {
@@ -32,7 +32,7 @@ class EmailService
             ], function ($message) use ($recipientEmail)
             {
                 $message->from('patricksabry97@hotmail.com', 'Patrick Sabry');
-                $message->to($recipientEmail);
+                $message->to('notify@test.test');
                 $message->subject('A file has been successfully uploaded to the cloud!');
             });
 
